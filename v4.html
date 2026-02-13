@@ -89,7 +89,7 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 /* ===== RESULTS ===== */
 #results{background:#f5f2ee;z-index:1;justify-content:flex-start;padding-top:20px}
 .results-header{width:100%;max-width:500px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 16px;margin-bottom:16px;flex-shrink:0}
+  padding:0 16px;margin-bottom:16px;flex-shrink:0;position:relative;z-index:1}
 .back-btn{background:rgba(26,26,46,.08);border:none;font-size:22px;cursor:pointer;padding:10px 14px;
   line-height:1;border-radius:50%;color:#1a1a2e;transition:background .15s}
 .back-btn:active{background:rgba(26,26,46,.15)}
@@ -97,7 +97,7 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .show-all-link{font-size:13px;color:#8b5cf6;text-decoration:none;cursor:pointer;background:none;border:none;
   font-family:'Space Grotesk',sans-serif;font-weight:600}
 
-.carousel-wrap{flex:1;width:100%;position:relative;overflow:hidden;display:flex;align-items:center}
+.carousel-wrap{flex:1;width:100%;position:relative;overflow:hidden;display:flex;align-items:center;z-index:1}
 .carousel{display:flex;transition:transform .3s cubic-bezier(.25,.46,.45,.94);height:100%;align-items:center;
   will-change:transform;padding:0 24px}
 .carousel.no-transition{transition:none}
@@ -118,7 +118,7 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .rec-card .card-links a:active{color:#1a1a2e}
 .rec-card .card-links svg{width:26px;height:26px;fill:currentColor}
 
-.dots{display:flex;justify-content:center;gap:6px;padding:16px 0 28px;flex-shrink:0}
+.dots{display:flex;justify-content:center;gap:6px;padding:16px 0 28px;flex-shrink:0;position:relative;z-index:1}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(26,26,46,.15);transition:all .2s}
 .dot.active{background:#ff006e;width:24px;border-radius:4px}
 
@@ -174,50 +174,56 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .rec-card, .all-item {
   position: relative;
   overflow: visible;
-  border: none !important;
   z-index: 0;
 }
 
+/* Default cards: subtle static border + soft shadow */
 .rec-card::before, .all-item::before {
   content: '';
   position: absolute;
-  inset: -3px;
-  border-radius: 31px; /* card 28px + 3px */
-  background: conic-gradient(from var(--angle), #ff006e, #8b5cf6, #00f5d4, #facc15, #ff006e);
+  inset: -1.5px;
+  border-radius: 30px;
+  background: linear-gradient(135deg, rgba(139,92,246,.15), rgba(255,0,110,.1), rgba(0,245,212,.1));
   z-index: -1;
-  animation: rotateBorder var(--border-speed, 10s) linear infinite;
-  opacity: 0.7;
   transition: opacity 0.3s ease;
+  opacity: 1;
+}
+.all-item::before {
+  border-radius: 22px;
 }
 
-.all-item::before {
-  border-radius: 23px; /* 20px + 3px */
+/* Every 4th card gets animated gradient border */
+.rec-card:nth-child(4n+1)::before,
+.all-item:nth-child(4n+1)::before {
+  inset: -3px;
+  border-radius: 31px;
+  background: conic-gradient(from var(--angle), #ff006e, #8b5cf6, #00f5d4, #facc15, #ff006e);
+  animation: rotateBorder var(--border-speed, 10s) linear infinite;
+  opacity: 0.5;
+}
+.all-item:nth-child(4n+1)::before {
+  border-radius: 23px;
 }
 
 @keyframes rotateBorder {
   to { --angle: 360deg; }
 }
 
-/* Stagger speeds per card for organic feel */
+/* Stagger speeds for animated cards */
 .rec-card:nth-child(1) { --border-speed: 8s; }
-.rec-card:nth-child(2) { --border-speed: 10s; }
-.rec-card:nth-child(3) { --border-speed: 12s; }
-.rec-card:nth-child(4) { --border-speed: 9s; }
 .rec-card:nth-child(5) { --border-speed: 11s; }
-.rec-card:nth-child(6) { --border-speed: 7s; }
-.rec-card:nth-child(7) { --border-speed: 13s; }
-.rec-card:nth-child(8) { --border-speed: 8.5s; }
+.rec-card:nth-child(9) { --border-speed: 9s; }
+.rec-card:nth-child(13) { --border-speed: 12s; }
 
-.all-item:nth-child(odd) { --border-speed: 10s; }
-.all-item:nth-child(even) { --border-speed: 12s; }
+.all-item:nth-child(4n+1) { --border-speed: 10s; }
 
-/* Hover: speed up + brighten */
-.rec-card:hover::before, .all-item:hover::before {
-  opacity: 1;
+/* Hover: brighten animated cards */
+.rec-card:nth-child(4n+1):hover::before, .all-item:nth-child(4n+1):hover::before {
+  opacity: 0.8;
   animation-duration: 3s;
 }
 
-/* Card breathing animation */
+/* Card breathing animation — very subtle */
 .rec-card {
   animation: cardBreathe 6s ease-in-out infinite;
 }
@@ -225,7 +231,77 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 
 @keyframes cardBreathe {
   0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.004); }
+  50% { transform: scale(1.002); }
+}
+
+/* ===== RESULTS BACKGROUND BLOBS ===== */
+#results::before, #results::after,
+#allview::before, #allview::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(100px);
+  z-index: 0;
+  pointer-events: none;
+}
+#results::before, #allview::before {
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(255,0,110,.12), transparent 70%);
+  top: -100px; left: -100px;
+  animation: blobDrift1 20s ease-in-out infinite alternate;
+}
+#results::after, #allview::after {
+  width: 350px; height: 350px;
+  background: radial-gradient(circle, rgba(139,92,246,.1), transparent 70%);
+  bottom: -50px; right: -80px;
+  animation: blobDrift2 25s ease-in-out infinite alternate;
+}
+
+@keyframes blobDrift1 {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(80px, 60px) scale(1.15); }
+  66% { transform: translate(40px, 120px) scale(0.95); }
+  100% { transform: translate(120px, 40px) scale(1.1); }
+}
+@keyframes blobDrift2 {
+  0% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-60px, -40px) scale(1.1); }
+  66% { transform: translate(-100px, -80px) scale(0.9); }
+  100% { transform: translate(-40px, -120px) scale(1.05); }
+}
+
+/* Extra blob via box-shadow on results for third colour */
+.carousel-wrap::before {
+  content: '';
+  position: fixed;
+  width: 300px; height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,245,212,.1), transparent 70%);
+  filter: blur(80px);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  animation: blobDrift3 18s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+@keyframes blobDrift3 {
+  0% { transform: translate(-50%, -50%) scale(1); }
+  50% { transform: translate(-30%, -60%) scale(1.2); }
+  100% { transform: translate(-70%, -40%) scale(0.9); }
+}
+
+/* A warm golden blob too */
+.all-list::before {
+  content: '';
+  position: fixed;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(250,204,21,.1), transparent 70%);
+  filter: blur(90px);
+  top: 40%; right: -60px;
+  animation: blobDrift1 22s ease-in-out infinite alternate-reverse;
+  pointer-events: none;
+  z-index: 0;
 }
 
 /* Category badge shimmer */
@@ -258,10 +334,13 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
   z-index: 1;
 }
 
-/* Surprise card also gets the treatment */
+/* Surprise card always gets animated border */
 #surprise .rec-card::before {
-  animation-duration: 6s;
-  opacity: 0.9;
+  inset: -3px;
+  border-radius: 31px;
+  background: conic-gradient(from var(--angle), #ff006e, #8b5cf6, #00f5d4, #facc15, #ff006e);
+  animation: rotateBorder 6s linear infinite;
+  opacity: 0.6;
 }
 
 /* Easter egg */
