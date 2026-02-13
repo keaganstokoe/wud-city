@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WUD — What U Doing? | Cape Town City Guide</title>
+<meta name="description" content="Your mates' fave spots in the Mother City 🤙">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Lilita+One&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --coral:#FF6B6B;--turquoise:#4ECDC4;--yellow:#FFE66D;--pink:#FF85A1;
+  --lime:#A8E06C;--orange:#FFA552;--purple:#C490D1;--sky:#7EC8E3;
+  --cream:#FFF8F0;--dark:#2D1B00;
+}
+body{font-family:'Fredoka',sans-serif;background:var(--cream);color:var(--dark);overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+
+/* HERO */
+.hero{
+  background:linear-gradient(135deg,var(--coral),var(--pink),var(--orange),var(--yellow));
+  padding:3rem 1.5rem 2.5rem;text-align:center;position:relative;overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,0.15) 1px,transparent 1px);
+  background-size:30px 30px;animation:drift 20s linear infinite;
+}
+@keyframes drift{to{transform:translate(30px,30px)}}
+.hero-logo{
+  font-family:'Lilita One',sans-serif;font-size:5rem;color:#fff;
+  text-shadow:4px 4px 0 rgba(0,0,0,0.15);position:relative;
+  letter-spacing:-2px;line-height:1;
+}
+.hero-logo span{display:inline-block;animation:bounce 0.6s ease infinite alternate}
+.hero-logo span:nth-child(2){animation-delay:0.1s}
+.hero-logo span:nth-child(3){animation-delay:0.2s}
+@keyframes bounce{to{transform:translateY(-6px)}}
+.hero-sub{
+  font-size:1.25rem;color:#fff;margin-top:0.5rem;position:relative;
+  text-shadow:1px 1px 0 rgba(0,0,0,0.1);font-weight:500;
+}
+.hero-tagline{
+  font-size:0.95rem;color:rgba(255,255,255,0.9);margin-top:0.75rem;
+  position:relative;font-weight:400;max-width:400px;margin-left:auto;margin-right:auto;
+}
+
+/* SEARCH */
+.search-wrap{
+  max-width:500px;margin:-1.25rem auto 0;position:relative;z-index:10;padding:0 1.5rem;
+}
+.search-wrap input{
+  width:100%;padding:0.85rem 1.2rem 0.85rem 2.8rem;border-radius:50px;border:3px solid var(--orange);
+  font-family:'Fredoka',sans-serif;font-size:1rem;background:#fff;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);outline:none;transition:border-color 0.2s;
+}
+.search-wrap input:focus{border-color:var(--coral)}
+.search-wrap svg{position:absolute;left:2.5rem;top:50%;transform:translateY(-50%);opacity:0.4}
+
+/* FILTERS */
+.filters{
+  max-width:900px;margin:1.5rem auto 0;padding:0 1rem;
+}
+.filter-section{margin-bottom:0.75rem}
+.filter-label{font-size:0.8rem;font-weight:600;color:var(--dark);opacity:0.5;margin-bottom:0.4rem;text-transform:uppercase;letter-spacing:1px;padding-left:0.25rem}
+.filter-row{
+  display:flex;gap:0.5rem;overflow-x:auto;padding:0.25rem;-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+}
+.filter-row::-webkit-scrollbar{display:none}
+.pill{
+  flex-shrink:0;padding:0.45rem 1rem;border-radius:50px;font-size:0.85rem;font-weight:500;
+  cursor:pointer;transition:all 0.2s;border:2px solid transparent;
+  background:rgba(0,0,0,0.06);color:var(--dark);white-space:nowrap;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+}
+.pill:hover{transform:scale(1.05)}
+.pill.active{color:#fff;transform:scale(1.05);border-color:transparent}
+
+/* GRID */
+.grid{
+  max-width:900px;margin:1.5rem auto 2rem;padding:0 1rem;
+  display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem;
+}
+.card{
+  background:#fff;border-radius:20px;padding:1.25rem;
+  box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:all 0.25s;
+  border:2px solid transparent;position:relative;overflow:hidden;
+}
+.card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:4px;
+  border-radius:20px 20px 0 0;
+}
+.card:hover{transform:translateY(-4px);box-shadow:0 8px 25px rgba(0,0,0,0.1)}
+.card-cat{
+  display:inline-block;padding:0.25rem 0.75rem;border-radius:50px;font-size:0.75rem;
+  font-weight:600;color:#fff;margin-bottom:0.6rem;
+}
+.card-name{font-family:'Lilita One',sans-serif;font-size:1.35rem;line-height:1.2;margin-bottom:0.3rem}
+.card-notes{font-size:0.9rem;color:#666;margin-bottom:0.75rem;line-height:1.4}
+.card-bottom{display:flex;align-items:center;justify-content:space-between}
+.card-person{display:flex;align-items:center;gap:0.5rem;font-size:0.85rem;font-weight:500}
+.avatar{
+  width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  font-size:0.7rem;font-weight:700;color:#fff;flex-shrink:0;
+}
+.card-links{display:flex;gap:0.5rem}
+.card-links a{
+  width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,0.06);
+  display:flex;align-items:center;justify-content:center;transition:all 0.2s;
+}
+.card-links a:hover{background:rgba(0,0,0,0.12);transform:scale(1.1)}
+.card-links svg{width:16px;height:16px;fill:var(--dark);opacity:0.6}
+
+/* EMPTY */
+.empty{text-align:center;padding:3rem 1rem;grid-column:1/-1}
+.empty-emoji{font-size:3rem;margin-bottom:0.5rem}
+.empty-text{font-size:1.1rem;color:#999}
+
+/* COUNTER */
+.counter{text-align:center;font-size:0.85rem;color:#999;margin-top:0.5rem;padding:0 1rem}
+
+/* FOOTER */
+footer{
+  text-align:center;padding:2rem 1rem 2.5rem;
+  background:linear-gradient(135deg,var(--turquoise),var(--sky));color:#fff;
+  margin-top:1rem;
+}
+footer .ft-logo{font-family:'Lilita One',sans-serif;font-size:2rem}
+footer p{font-size:0.9rem;margin-top:0.25rem;opacity:0.9}
+footer .ft-sub{font-size:0.8rem;margin-top:0.75rem;opacity:0.7}
+
+/* COLOUR CLASSES */
+.bg-coral{background:var(--coral)}.bg-turquoise{background:var(--turquoise)}
+.bg-yellow{background:var(--yellow);color:var(--dark)}.bg-pink{background:var(--pink)}
+.bg-lime{background:var(--lime);color:var(--dark)}.bg-orange{background:var(--orange)}
+.bg-purple{background:var(--purple)}.bg-sky{background:var(--sky)}
+
+@media(max-width:600px){
+  .hero-logo{font-size:3.5rem}
+  .hero-sub{font-size:1.05rem}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-logo"><span>W</span><span>U</span><span>D</span></div>
+  <div class="hero-sub">what u doing? 🤙</div>
+  <div class="hero-tagline">your mates' fave spots in the mother city — no algorithms, just good vibes from good people</div>
+</div>
+
+<div class="search-wrap">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+  <input type="text" id="search" placeholder="search for a spot, vibe, or person...">
+</div>
+
+<div class="filters">
+  <div class="filter-section">
+    <div class="filter-label">vibes</div>
+    <div class="filter-row" id="catFilters"></div>
+  </div>
+  <div class="filter-section">
+    <div class="filter-label">the crew</div>
+    <div class="filter-row" id="personFilters"></div>
+  </div>
+</div>
+
+<div class="counter" id="counter"></div>
+<div class="grid" id="grid"></div>
+
+<footer>
+  <div class="ft-logo">WUD</div>
+  <p>made with ❤️ by friends, for friends</p>
+  <div class="ft-sub">cape town · wud.city · what u doing?</div>
+</footer>
+
+<script>
+const RECS=[{"place":"Ground Cafe","category":"Breakfast","recommendedBy":"Calvin Branson","notes":"English breakfast with 2 extra eggs is the way to go","website":"https://www.groundartcaffe.co.za/","instagram":"https://www.instagram.com/groundartcaffe/"},{"place":"Spar salad","category":"Lunch","recommendedBy":"Calvin Branson","notes":"Quick easy healthy lunch","website":"","instagram":""},{"place":"Galileo Open Air Cinema","category":"Entertainment","recommendedBy":"Calvin Branson","notes":"Froth for a Galileo open air cinema eve","website":"https://thegalileo.co.za/","instagram":"https://www.instagram.com/thegalileo/"},{"place":"Iron Tiger","category":"Fitness","recommendedBy":"Calvin Branson","notes":"Morning Muay Thai","website":"https://irontiger.co.za/","instagram":"https://www.instagram.com/irontigerct/"},{"place":"Gios Dinner at Bakoven","category":"Dinner","recommendedBy":"Calvin Branson","notes":"Post-work sunset, out on the rocks","website":"","instagram":""},{"place":"Greenpoint Tennis + Stepbrothers","category":"Activity + Food","recommendedBy":"Spencer Kyle","notes":"Tennis then beer and pizza/pasta","website":"https://www.stepbrothers.co.za","instagram":"https://www.instagram.com/stepbrothers_cpt/"},{"place":"Running Late Club","category":"Social + Fitness","recommendedBy":"Spencer Kyle","notes":"Socialise + run + swim + dinner every random Wednesday","website":"https://www.runninglateclub.com/","instagram":"https://www.instagram.com/runninglateclub/"},{"place":"Lions Head Loop","category":"Hiking","recommendedBy":"Spencer Kyle","notes":"Also recommended by Poppy Strange, Cally Frost","website":"","instagram":""},{"place":"Camps Bay Tidal Pool","category":"Swimming","recommendedBy":"Spencer Kyle","notes":"After running to Apostles and back","website":"","instagram":""},{"place":"Modular","category":"Nightlife","recommendedBy":"Spencer Kyle","notes":"","website":"https://modularclub.com/","instagram":"https://www.instagram.com/modular_cape_town/"},{"place":"Oranjezicht Night Market","category":"Market","recommendedBy":"Emma Cockbain","notes":"After Running Late Club","website":"https://ozcf.co.za/","instagram":"https://www.instagram.com/ozcfarm/"},{"place":"Labia Theatre Specials","category":"Entertainment","recommendedBy":"Emma Cockbain","notes":"They often do collabs with restaurants","website":"https://www.thelabia.co.za/","instagram":"https://www.instagram.com/thelabia/"},{"place":"Brunch at The Vineyard Hotel","category":"Brunch","recommendedBy":"Emma Cockbain","notes":"","website":"https://www.vineyard.co.za/","instagram":"https://www.instagram.com/vineyard_hotel/"},{"place":"Run along Chapmans Peak + South Yeaster Bakery","category":"Running + Coffee","recommendedBy":"Emma Cockbain","notes":"","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Sunset at Leopard Bar, Twelve Apostles","category":"Drinks","recommendedBy":"Emma Cockbain","notes":"","website":"https://12apostleshotel.com/","instagram":"https://www.instagram.com/12apostleshotel/"},{"place":"Braai and Swim at Oudekraal","category":"Beach","recommendedBy":"Emma Cockbain","notes":"Also recommended by Danika","website":"","instagram":""},{"place":"Running towards Hout Bay","category":"Running","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Breakfast Croissant at South Yeaster","category":"Breakfast","recommendedBy":"Keagan Stokoe","notes":"","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Sneak friends onto the Blue Bus","category":"Activity","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Beach day at The Glen","category":"Beach","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Gin Bar","category":"Drinks","recommendedBy":"Keagan Stokoe","notes":"","website":"https://www.theginbar.co.za/","instagram":"https://www.instagram.com/theginbar/"},{"place":"Bodega Ramen","category":"Dinner","recommendedBy":"Keagan Stokoe","notes":"Also recommended by Dayna Green","website":"","instagram":"https://www.instagram.com/bodega_ct/"},{"place":"Golf at The Met","category":"Sport","recommendedBy":"Ben Dryden","notes":"","website":"https://metropolitangolfclub.co.za/","instagram":"https://www.instagram.com/metropolitan_golf_club/"},{"place":"Hazendal Driving Range","category":"Sport + Drinks","recommendedBy":"Ben Dryden","notes":"Driving range and beers","website":"https://www.hazendal.co.za/","instagram":"https://www.instagram.com/hazendal_estate/"},{"place":"Green Point Park Picnic","category":"Activity","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":""},{"place":"Ouzeri","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://www.ouzeri.co.za/","instagram":"https://www.instagram.com/ouzeri_ct/"},{"place":"Nikkei","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://nikkei.co.za/","instagram":"https://www.instagram.com/nikkei_za/"},{"place":"Prom Run + Saunders Dip + Vagabonds Breakfast Wrap","category":"Running + Food","recommendedBy":"Ben Dryden","notes":"So naughty","website":"https://www.vagabondkitchens.co.za/","instagram":"https://www.instagram.com/vagabondcpt/"},{"place":"Norfolk Crookie","category":"Coffee + Treats","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/norfolk.deli/"},{"place":"Zuney Burger","category":"Food + Drinks","recommendedBy":"Ben Dryden","notes":"Burger + beers","website":"https://www.zuneyburgers.com/","instagram":"https://www.instagram.com/zuneywagyu/"},{"place":"Only Fools Rooftop Bar","category":"Drinks + Food","recommendedBy":"Ben Dryden","notes":"Burger on rooftop. Also recommended by Danika","website":"https://onlyfools.co.za/","instagram":"https://www.instagram.com/onlyfoolsct/"},{"place":"Upper Union","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://www.upperunion.co.za/","instagram":"https://www.instagram.com/upperunion_restaurant/"},{"place":"House of Machines","category":"Drinks + Food","recommendedBy":"Ben Dryden","notes":"Bezza + burger","website":"https://thehouseofmachines.com/","instagram":"https://www.instagram.com/thehouseofmachines_cpt/"},{"place":"Kiki","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/kiki.cpt/"},{"place":"Constantia Nek Hike into Kirstenbosch","category":"Hiking","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":""},{"place":"Beau Constantia + Buitenverwachting Lawns","category":"Wine Farm","recommendedBy":"Ben Dryden","notes":"Daybender","website":"https://www.beauconstantia.com/","instagram":"https://www.instagram.com/beauconstantia/"},{"place":"Cafe Sofi","category":"Coffee","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/cafesofi_sa/"},{"place":"Rosettas","category":"Coffee","recommendedBy":"Ben Dryden","notes":"","website":"https://www.rosettaroastery.com/","instagram":"https://www.instagram.com/rosettaroastery/"},{"place":"OnePark","category":"Drinks","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/one_park_cpt/"},{"place":"Innovation City","category":"Workspace","recommendedBy":"Ben Dryden","notes":"","website":"https://innovationcity.co.za/","instagram":"https://www.instagram.com/innovationcitycpt/"},{"place":"Ideas Cartel + W17","category":"Workspace","recommendedBy":"Ben Dryden","notes":"","website":"https://www.ideascartel.com/","instagram":"https://www.instagram.com/ideascartel/"},{"place":"Stepbrothers Pizza in Green Point Park","category":"Food","recommendedBy":"Cally Frost","notes":"","website":"https://www.stepbrothers.co.za","instagram":"https://www.instagram.com/stepbrothers_cpt/"},{"place":"Saunders to South Yeaster Run","category":"Running + Coffee","recommendedBy":"Cally Frost","notes":"Run and coffee after","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Mesquite + Carrot Cake at Strangers Club","category":"Coffee + Treats","recommendedBy":"Cally Frost","notes":"","website":"https://thestrangersclub.co.za/","instagram":"https://www.instagram.com/thestrangersclubct/"},{"place":"Missing Link Trail Run","category":"Running","recommendedBy":"Cally Frost","notes":"","website":"","instagram":""},{"place":"Chapmans Peak Drive to Chapman Peak Hotel","category":"Food","recommendedBy":"Cally Frost","notes":"Fish and chips","website":"https://www.chapmanspeakhotel.co.za/","instagram":""},{"place":"Babylonstoren","category":"Day Trip","recommendedBy":"Isabella Watterson","notes":"","website":"https://babylonstoren.com/","instagram":"https://www.instagram.com/babylonstoren/"},{"place":"yoga(space)","category":"Fitness","recommendedBy":"Isabella Watterson","notes":"","website":"https://www.yogaspace.co.za/","instagram":"https://www.instagram.com/yogaspace____/"},{"place":"Strauss and Co Art Club","category":"Art + Culture","recommendedBy":"Isabella Watterson","notes":"","website":"https://www.straussart.co.za/","instagram":"https://www.instagram.com/strauss_and_co/"},{"place":"Art School Africa - Collectors Club","category":"Art + Culture","recommendedBy":"Isabella Watterson","notes":"Also recommended by Poppy Strange","website":"https://artschoolafrica.com/","instagram":"https://www.instagram.com/artschoolafrica/"},{"place":"Not So Fast Run Club","category":"Running","recommendedBy":"Isabella Watterson","notes":"Wednesday and Saturday","website":"","instagram":"https://www.instagram.com/notsofast.runningclub.ct/"},{"place":"Akra","category":"Drinks","recommendedBy":"Isabella Watterson","notes":"New cocktail bar","website":"","instagram":"https://www.instagram.com/akra_bar/"},{"place":"The Focaccia Bar","category":"Food","recommendedBy":"Isabella Watterson","notes":"","website":"","instagram":"https://www.instagram.com/the_focacciabar/"},{"place":"Lellos","category":"Coffee + Food","recommendedBy":"Isabella Watterson","notes":"Coffee and croissant","website":"","instagram":"https://www.instagram.com/lellosdeli/"},{"place":"Ceremony","category":"Coffee","recommendedBy":"Isabella Watterson","notes":"Cornflake matcha","website":"","instagram":"https://www.instagram.com/ceremonysouthafrica/"},{"place":"Horizon Gym Free Workouts","category":"Fitness","recommendedBy":"Isabella Watterson","notes":"Weekly workouts on the prom","website":"https://www.horizengym.com/","instagram":"https://www.instagram.com/horizenza/"},{"place":"Espresso Lab","category":"Coffee + Workspace","recommendedBy":"Dayna Green","notes":"Remote working and interesting coffee","website":"https://espressolabmicroroasters.com/","instagram":"https://www.instagram.com/espressolabza/"},{"place":"The Outlore","category":"Entertainment","recommendedBy":"Dayna Green","notes":"Immersive dance shows/experiences","website":"https://theoutlore.com/","instagram":"https://www.instagram.com/theoutlore/"},{"place":"Sculp/Barre at Ivy Room and Novacore","category":"Fitness","recommendedBy":"Dayna Green","notes":"","website":"https://www.theivyroom.co.za/","instagram":"https://www.instagram.com/theivyroom/"},{"place":"Cocktails at Rockpool","category":"Drinks","recommendedBy":"Dayna Green","notes":"","website":"https://www.rockpoolct.co.za/","instagram":"https://www.instagram.com/rockpoolct/"},{"place":"Bao Down","category":"Dinner","recommendedBy":"Poppy Strange","notes":"Dont skip the Miso Tart for pud!","website":"https://www.baodowncapetown.com/","instagram":"https://www.instagram.com/baodownrestaurant/"},{"place":"Moro Gelato","category":"Dessert","recommendedBy":"Poppy Strange","notes":"","website":"https://www.morogelato.co.za/","instagram":"https://www.instagram.com/morogelato/"},{"place":"Strangers Club","category":"Coffee","recommendedBy":"Poppy Strange","notes":"Also recommended by Cally Frost","website":"https://thestrangersclub.co.za/","instagram":"https://www.instagram.com/thestrangersclubct/"},{"place":"Plato Coffee Frezos","category":"Coffee","recommendedBy":"Poppy Strange","notes":"Recent discovery","website":"https://plato.coffee/","instagram":"https://www.instagram.com/plato.coffee/"},{"place":"Rust En Vrede","category":"Dinner","recommendedBy":"Poppy Strange","notes":"Outside Stellenbosch, best steak and chips","website":"https://rustenvrede.com/","instagram":"https://www.instagram.com/rustenvrede1694/"},{"place":"Constantia Nek to De Villiers Dam","category":"Hiking","recommendedBy":"Poppy Strange","notes":"Stunning views and a dip","website":"","instagram":""},{"place":"Jonkershoek Waterfall Hike","category":"Hiking","recommendedBy":"Poppy Strange","notes":"","website":"","instagram":""},{"place":"Disa Beach at Cape Point","category":"Beach","recommendedBy":"Poppy Strange","notes":"On a windless day!","website":"","instagram":""},{"place":"Hot Huts / Go Sauna","category":"Wellness","recommendedBy":"Poppy Strange","notes":"Mobile saunas next to Saunders or Camps Bay Tidal Pool","website":"https://hothuts.co.za/","instagram":"https://www.instagram.com/hothutsza/"},{"place":"Bodhi Breathwork in Hout Bay","category":"Wellness","recommendedBy":"Poppy Strange","notes":"Astrology and breathwork","website":"https://www.bodhibreathwork.com/","instagram":"https://www.instagram.com/bodhi_breathwork/"},{"place":"OneFlow","category":"Fitness","recommendedBy":"Poppy Strange","notes":"Sculpt","website":"https://www.oneflow.co.za/","instagram":"https://www.instagram.com/oneflowcapetown/"},{"place":"The Movement Lab","category":"Fitness","recommendedBy":"Poppy Strange","notes":"Pilates","website":"https://www.themovementlab.co.za/","instagram":"https://www.instagram.com/themovementlab_sa/"},{"place":"Shirley Fintz at Shangrila / Karienne Belle","category":"Shopping","recommendedBy":"Poppy Strange","notes":"Unique fashion finds, open days or appointments only","website":"","instagram":"https://www.instagram.com/shirleyfintz/"},{"place":"Afrika Burn","category":"Festival","recommendedBy":"Poppy Strange","notes":"","website":"https://www.afrikaburn.org/","instagram":"https://www.instagram.com/afrikaburn/"},{"place":"Evening Tennis + Step Brothers Dinner","category":"Activity + Food","recommendedBy":"Danika","notes":"","website":"","instagram":""},{"place":"Drinks at Only Fools + Dinner at Sundoo","category":"Drinks + Dinner","recommendedBy":"Danika","notes":"","website":"https://sundoo.co.za/","instagram":"https://www.instagram.com/sundooindiantapas/"},{"place":"Bootleggers R29 Coffee + Prom Walk","category":"Coffee + Activity","recommendedBy":"Danika","notes":"Morning walk","website":"https://www.bootlegger.coffee/","instagram":"https://www.instagram.com/bootleggercoffeecompany/"},{"place":"Clifton 2nd Beach","category":"Beach","recommendedBy":"Danika","notes":"With spikeball for extra fun","website":"","instagram":""},{"place":"Self-proclaimed Best Coffee in the World","category":"Coffee","recommendedBy":"Spencer Kyle","notes":"Google Maps link shared","website":"","instagram":""}];
+
+const COLORS=['var(--coral)','var(--turquoise)','var(--pink)','var(--lime)','var(--orange)','var(--purple)','var(--sky)','var(--yellow)'];
+const catColorMap={};
+const personColorMap={};
+
+// Extract unique categories and people
+const categories=[...new Set(RECS.map(r=>r.category))].sort();
+const people=[...new Set(RECS.map(r=>r.recommendedBy))].sort();
+
+categories.forEach((c,i)=>catColorMap[c]=COLORS[i%COLORS.length]);
+people.forEach((p,i)=>personColorMap[p]=COLORS[(i+3)%COLORS.length]);
+
+let activeCat=null, activePerson=null, searchTerm='';
+
+function init(){
+  const cf=document.getElementById('catFilters');
+  const pf=document.getElementById('personFilters');
+  
+  // Category pills
+  const allCat=mk('span','pill active','all vibes ✨');
+  allCat.style.background='var(--coral)';
+  allCat.onclick=()=>{activeCat=null;updatePills();render()};
+  cf.appendChild(allCat);
+  
+  categories.forEach(c=>{
+    const p=mk('span','pill',c);
+    p.dataset.cat=c;
+    p.onclick=()=>{activeCat=activeCat===c?null:c;updatePills();render()};
+    cf.appendChild(p);
+  });
+  
+  // People pills  
+  const allP=mk('span','pill active','everyone 👯');
+  allP.style.background='var(--turquoise)';
+  allP.onclick=()=>{activePerson=null;updatePills();render()};
+  pf.appendChild(allP);
+  
+  people.forEach(p=>{
+    const el=mk('span','pill',p.split(' ')[0]);
+    el.dataset.person=p;
+    el.onclick=()=>{activePerson=activePerson===p?null:p;updatePills();render()};
+    pf.appendChild(el);
+  });
+  
+  document.getElementById('search').addEventListener('input',e=>{searchTerm=e.target.value.toLowerCase();render()});
+  
+  render();
+}
+
+function mk(tag,cls,txt){const e=document.createElement(tag);e.className=cls;if(txt)e.textContent=txt;return e}
+
+function updatePills(){
+  document.querySelectorAll('#catFilters .pill').forEach(p=>{
+    const c=p.dataset.cat;
+    if(!c){p.classList.toggle('active',!activeCat);p.style.background=!activeCat?'var(--coral)':''}
+    else{p.classList.toggle('active',activeCat===c);p.style.background=activeCat===c?catColorMap[c]:''}
+  });
+  document.querySelectorAll('#personFilters .pill').forEach(p=>{
+    const n=p.dataset.person;
+    if(!n){p.classList.toggle('active',!activePerson);p.style.background=!activePerson?'var(--turquoise)':''}
+    else{p.classList.toggle('active',activePerson===n);p.style.background=activePerson===n?personColorMap[n]:''}
+  });
+}
+
+function render(){
+  const grid=document.getElementById('grid');
+  const filtered=RECS.filter(r=>{
+    if(activeCat&&r.category!==activeCat)return false;
+    if(activePerson&&r.recommendedBy!==activePerson)return false;
+    if(searchTerm){
+      const s=searchTerm;
+      return r.place.toLowerCase().includes(s)||r.category.toLowerCase().includes(s)||
+        r.recommendedBy.toLowerCase().includes(s)||(r.notes||'').toLowerCase().includes(s);
+    }
+    return true;
+  });
+  
+  document.getElementById('counter').textContent=filtered.length+' spot'+(filtered.length!==1?'s':'')+' 📍';
+  
+  if(!filtered.length){
+    grid.innerHTML='<div class="empty"><div class="empty-emoji">🫠</div><div class="empty-text">no spots match that vibe... try something else?</div></div>';
+    return;
+  }
+  
+  grid.innerHTML='';
+  filtered.forEach(r=>{
+    const card=document.createElement('div');
+    card.className='card';
+    const col=catColorMap[r.category]||'var(--coral)';
+    card.style.borderColor=col+'22';
+    card.innerHTML=`
+      <span class="card-cat" style="background:${col}">${r.category}</span>
+      <div class="card-name">${r.place}</div>
+      ${r.notes?`<div class="card-notes">${r.notes}</div>`:''}
+      <div class="card-bottom">
+        <div class="card-person">
+          <span class="avatar" style="background:${personColorMap[r.recommendedBy]||'var(--coral)'}">${r.recommendedBy.split(' ').map(w=>w[0]).join('')}</span>
+          ${r.recommendedBy}
+        </div>
+        <div class="card-links">
+          ${r.website?`<a href="${r.website}" target="_blank" rel="noopener" title="Website"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>`:''} 
+          ${r.instagram?`<a href="${r.instagram}" target="_blank" rel="noopener" title="Instagram"><svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg></a>`:''}
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+init();
+</script>
+</body>
+</html>
