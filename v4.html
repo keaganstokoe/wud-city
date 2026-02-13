@@ -4,131 +4,193 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
 <title>WUD — pick your vibe</title>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&family=Unbounded:wght@400;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{
-  --bg:#FFF8F0;--dark:#1a1a2e;--accent:#FF6B6B;--accent2:#4ECDC4;--accent3:#FFE66D;
-  --purple:#A855F7;--blue:#3B82F6;--pink:#EC4899;--orange:#F97316;--green:#10B981;
-  --sand:#F5E6D3;--card-bg:#fff;
-}
-html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--dark)}
+html,body{height:100%;overflow:hidden;font-family:'Space Grotesk',sans-serif;background:#0a0a1a;color:#fff}
 
 .screen{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;
-  transition:transform .5s cubic-bezier(.4,0,.2,1),opacity .4s ease;will-change:transform,opacity;padding:24px}
-.screen.hidden-left{transform:translateX(-100%);opacity:0;pointer-events:none}
-.screen.hidden-right{transform:translateX(100%);opacity:0;pointer-events:none}
+  opacity:0;pointer-events:none;transition:opacity .25s,transform .25s cubic-bezier(.4,0,.2,1);
+  will-change:transform,opacity;padding:24px}
+.screen.hidden-right{transform:translateX(40px)}
+.screen.hidden-left{transform:translateX(-40px)}
 .screen.active{transform:translateX(0);opacity:1;pointer-events:auto}
 
-/* LANDING */
-#landing{background:linear-gradient(135deg,#FF6B6B 0%,#FFE66D 50%,#4ECDC4 100%);z-index:3}
-.landing-content{text-align:center}
-.brand{font-family:'Space Grotesk',sans-serif;font-size:clamp(80px,20vw,140px);font-weight:700;color:#fff;
-  text-shadow:4px 4px 0 rgba(0,0,0,.1);line-height:1;margin-bottom:8px;letter-spacing:-4px}
-.tagline{font-size:clamp(20px,5vw,32px);color:rgba(255,255,255,.9);margin-bottom:48px;font-weight:500}
-.tagline .typed{display:inline-block;border-right:3px solid rgba(255,255,255,.8);padding-right:4px;
-  animation:blink .8s infinite}
+/* ===== PARTICLES / BG ===== */
+canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
+
+/* ===== LANDING ===== */
+#landing{z-index:3;overflow:hidden}
+.landing-bg{position:absolute;inset:0;background:linear-gradient(135deg,#1a0030,#0a0a2e,#001a1a);overflow:hidden}
+.landing-bg .orb{position:absolute;border-radius:50%;filter:blur(80px);animation:orbFloat 6s ease-in-out infinite alternate;opacity:.6}
+.landing-bg .orb:nth-child(1){width:300px;height:300px;background:#ff006e;top:-50px;left:-50px;animation-delay:0s}
+.landing-bg .orb:nth-child(2){width:250px;height:250px;background:#3b82f6;bottom:-30px;right:-30px;animation-delay:-2s}
+.landing-bg .orb:nth-child(3){width:200px;height:200px;background:#facc15;top:50%;left:60%;animation-delay:-4s}
+@keyframes orbFloat{0%{transform:translate(0,0) scale(1)}100%{transform:translate(30px,-40px) scale(1.2)}}
+
+.landing-content{position:relative;z-index:1;text-align:center}
+.brand{font-family:'Unbounded',sans-serif;font-size:clamp(100px,28vw,200px);font-weight:900;
+  background:linear-gradient(135deg,#ff006e,#facc15,#00f5d4,#ff006e);background-size:300% 300%;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  animation:gradShift 3s ease-in-out infinite;line-height:.85;letter-spacing:-6px;
+  filter:drop-shadow(0 0 40px rgba(255,0,110,.4))}
+@keyframes gradShift{0%,100%{background-position:0% 50%}50%{background-position:100% 50%}}
+
+.tagline{font-size:clamp(18px,5vw,28px);color:rgba(255,255,255,.7);margin:16px 0 48px;font-weight:400}
+.tagline .typed{display:inline-block;border-right:3px solid #ff006e;padding-right:4px;animation:blink .6s infinite}
 @keyframes blink{50%{border-color:transparent}}
-.cta-btn{background:#fff;color:var(--dark);border:none;padding:18px 48px;border-radius:50px;
-  font-size:20px;font-weight:700;font-family:'Space Grotesk',sans-serif;cursor:pointer;
-  box-shadow:0 8px 32px rgba(0,0,0,.15);transition:transform .2s,box-shadow .2s}
-.cta-btn:active{transform:scale(.95);box-shadow:0 4px 16px rgba(0,0,0,.1)}
 
-/* VIBES */
-#vibes{background:var(--bg);z-index:2;justify-content:flex-start;padding-top:24px;overflow-y:auto}
-.vibes-title{font-family:'Space Grotesk',sans-serif;font-size:clamp(28px,7vw,42px);font-weight:700;
-  text-align:center;margin-bottom:24px;line-height:1.1}
-.vibes-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:400px;padding:0 8px}
-.vibe-tile{border-radius:20px;padding:24px 16px;text-align:center;cursor:pointer;border:none;
-  transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;min-height:110px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px}
-.vibe-tile:active{transform:scale(.93)}
-.vibe-tile .emoji{font-size:36px;line-height:1}
-.vibe-tile .label{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:16px;color:#fff;line-height:1.2}
-.vibe-tile .count{font-size:12px;color:rgba(255,255,255,.7);font-weight:500}
+.cta-btn{background:linear-gradient(135deg,#ff006e,#8b5cf6);color:#fff;border:none;padding:20px 56px;
+  border-radius:60px;font-size:22px;font-weight:700;font-family:'Unbounded',sans-serif;cursor:pointer;
+  box-shadow:0 0 40px rgba(255,0,110,.5),0 0 80px rgba(139,92,246,.3);
+  animation:ctaPulse 2s ease-in-out infinite;transition:transform .15s;position:relative;overflow:hidden}
+.cta-btn::before{content:'';position:absolute;inset:-2px;border-radius:62px;
+  background:linear-gradient(135deg,#ff006e,#facc15,#00f5d4,#8b5cf6);background-size:300% 300%;
+  animation:gradShift 2s linear infinite;z-index:-1;filter:blur(4px)}
+.cta-btn:active{transform:scale(.92);animation:none}
+@keyframes ctaPulse{0%,100%{box-shadow:0 0 40px rgba(255,0,110,.5),0 0 80px rgba(139,92,246,.3)}
+  50%{box-shadow:0 0 60px rgba(255,0,110,.7),0 0 120px rgba(139,92,246,.5)}}
 
-.vibe-tile:nth-child(1){background:linear-gradient(135deg,#FF6B6B,#ee5a24)}
-.vibe-tile:nth-child(2){background:linear-gradient(135deg,#A0522D,#D2691E)}
-.vibe-tile:nth-child(3){background:linear-gradient(135deg,#A855F7,#7C3AED)}
-.vibe-tile:nth-child(4){background:linear-gradient(135deg,#10B981,#059669)}
-.vibe-tile:nth-child(5){background:linear-gradient(135deg,#3B82F6,#06B6D4)}
-.vibe-tile:nth-child(6){background:linear-gradient(135deg,#EC4899,#F43F5E)}
-.vibe-tile:nth-child(7){background:linear-gradient(135deg,#F97316,#EAB308)}
-.vibe-tile:nth-child(8){background:linear-gradient(135deg,#4ECDC4,#2DD4BF)}
+/* ===== VIBES ===== */
+#vibes{background:#0a0a1a;z-index:2;justify-content:flex-start;padding-top:28px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none}
+#vibes::-webkit-scrollbar{display:none}
+.vibes-title{font-family:'Unbounded',sans-serif;font-size:clamp(26px,7vw,40px);font-weight:700;
+  text-align:center;margin-bottom:8px;line-height:1.1}
+.vibes-sub{text-align:center;color:rgba(255,255,255,.5);font-size:14px;margin-bottom:24px}
+.vibes-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;width:100%;max-width:400px;padding:0 12px}
+.vibe-tile{border-radius:24px;padding:20px 14px;text-align:center;cursor:pointer;border:none;
+  transition:transform .15s cubic-bezier(.4,0,.2,1),box-shadow .15s;position:relative;overflow:hidden;
+  min-height:120px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;
+  transform:translateY(40px);opacity:0;animation:tileIn .4s cubic-bezier(.175,.885,.32,1.275) forwards}
+.vibe-tile:active{transform:scale(.9) !important}
+.vibe-tile .emoji{font-size:44px;line-height:1;animation:emojiWiggle 3s ease-in-out infinite;display:block}
+@keyframes emojiWiggle{0%,100%{transform:rotate(0)}25%{transform:rotate(-8deg) scale(1.1)}75%{transform:rotate(8deg) scale(1.1)}}
+.vibe-tile .label{font-family:'Unbounded',sans-serif;font-weight:700;font-size:15px;color:#fff;line-height:1.2}
+.vibe-tile .vibe-sub{font-size:11px;color:rgba(255,255,255,.6);font-weight:400;line-height:1.2;margin-top:2px}
+.vibe-tile .count{font-size:11px;color:rgba(255,255,255,.5);font-weight:400;margin-top:4px}
+@keyframes tileIn{to{transform:translateY(0);opacity:1}}
 
-.surprise-btn{margin-top:20px;background:none;border:2px dashed var(--dark);border-radius:50px;
-  padding:14px 32px;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;
-  cursor:pointer;color:var(--dark);transition:all .2s;margin-bottom:32px}
-.surprise-btn:active{transform:scale(.95);background:var(--dark);color:#fff}
+.vibe-tile:nth-child(1){background:linear-gradient(135deg,#ff006e,#ff4d6d);animation-delay:.05s;box-shadow:0 8px 30px rgba(255,0,110,.3)}
+.vibe-tile:nth-child(2){background:linear-gradient(135deg,#6d4c41,#d7a86e);animation-delay:.1s;box-shadow:0 8px 30px rgba(215,168,110,.3)}
+.vibe-tile:nth-child(3){background:linear-gradient(135deg,#8b5cf6,#a855f7);animation-delay:.15s;box-shadow:0 8px 30px rgba(139,92,246,.3)}
+.vibe-tile:nth-child(4){background:linear-gradient(135deg,#00c853,#10b981);animation-delay:.2s;box-shadow:0 8px 30px rgba(16,185,129,.3)}
+.vibe-tile:nth-child(5){background:linear-gradient(135deg,#00b4d8,#0096c7);animation-delay:.25s;box-shadow:0 8px 30px rgba(0,180,216,.3)}
+.vibe-tile:nth-child(6){background:linear-gradient(135deg,#f72585,#b5179e);animation-delay:.3s;box-shadow:0 8px 30px rgba(247,37,133,.3)}
+.vibe-tile:nth-child(7){background:linear-gradient(135deg,#f97316,#facc15);animation-delay:.35s;box-shadow:0 8px 30px rgba(249,115,22,.3)}
+.vibe-tile:nth-child(8){background:linear-gradient(135deg,#00f5d4,#00bbf9);animation-delay:.4s;box-shadow:0 8px 30px rgba(0,245,212,.3)}
 
-/* RESULTS */
-#results{background:var(--bg);z-index:1;justify-content:flex-start;padding-top:20px}
+.surprise-btn{margin-top:24px;background:linear-gradient(135deg,#ff006e,#8b5cf6);border:none;border-radius:60px;
+  padding:16px 36px;font-size:18px;font-weight:700;font-family:'Unbounded',sans-serif;cursor:pointer;color:#fff;
+  box-shadow:0 0 30px rgba(255,0,110,.4);transition:transform .15s;margin-bottom:40px;
+  animation:ctaPulse 3s ease-in-out infinite}
+.surprise-btn:active{transform:scale(.92);animation:none}
+
+/* ===== RESULTS ===== */
+#results{background:#0a0a1a;z-index:1;justify-content:flex-start;padding-top:20px}
 .results-header{width:100%;max-width:500px;display:flex;align-items:center;justify-content:space-between;
-  padding:0 8px;margin-bottom:16px;flex-shrink:0}
-.back-btn{background:none;border:none;font-size:28px;cursor:pointer;padding:8px;line-height:1}
-.results-vibe{font-family:'Space Grotesk',sans-serif;font-size:20px;font-weight:700}
-.show-all-link{font-size:13px;color:var(--accent);text-decoration:underline;cursor:pointer;
-  background:none;border:none;font-family:'DM Sans',sans-serif}
+  padding:0 16px;margin-bottom:16px;flex-shrink:0}
+.back-btn{background:rgba(255,255,255,.1);border:none;font-size:22px;cursor:pointer;padding:10px 14px;
+  line-height:1;border-radius:50%;color:#fff;transition:background .15s}
+.back-btn:active{background:rgba(255,255,255,.2)}
+.results-vibe{font-family:'Unbounded',sans-serif;font-size:18px;font-weight:700}
+.show-all-link{font-size:13px;color:#00f5d4;text-decoration:none;cursor:pointer;background:none;border:none;
+  font-family:'Space Grotesk',sans-serif;font-weight:600}
 
 .carousel-wrap{flex:1;width:100%;position:relative;overflow:hidden;display:flex;align-items:center}
-.carousel{display:flex;transition:transform .35s cubic-bezier(.4,0,.2,1);height:100%;align-items:center;
+.carousel{display:flex;transition:transform .3s cubic-bezier(.25,.46,.45,.94);height:100%;align-items:center;
   will-change:transform;padding:0 24px}
 .carousel.no-transition{transition:none}
-.rec-card{flex:0 0 calc(100vw - 64px);max-width:420px;background:var(--card-bg);border-radius:24px;
-  padding:28px 24px;margin:0 8px;box-shadow:0 4px 24px rgba(0,0,0,.08);display:flex;
-  flex-direction:column;gap:12px;min-height:280px}
-.rec-card .card-cat{display:inline-block;background:var(--accent);color:#fff;padding:6px 14px;
-  border-radius:50px;font-size:12px;font-weight:700;align-self:flex-start;font-family:'Space Grotesk',sans-serif}
-.rec-card .card-place{font-family:'Space Grotesk',sans-serif;font-size:clamp(24px,6vw,32px);font-weight:700;line-height:1.15}
-.rec-card .card-notes{font-size:15px;color:#666;line-height:1.5;flex:1}
-.rec-card .card-person{display:flex;align-items:center;gap:10px;font-size:14px;font-weight:500;margin-top:auto}
-.rec-card .avatar{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;
-  color:#fff;font-size:12px;font-weight:700;flex-shrink:0}
-.rec-card .card-links{display:flex;gap:10px;margin-top:4px}
-.rec-card .card-links a{color:var(--dark);opacity:.5;transition:opacity .2s}
-.rec-card .card-links a:hover{opacity:1}
-.rec-card .card-links svg{width:20px;height:20px;fill:currentColor}
 
-.counter{text-align:center;font-size:14px;color:#999;padding:16px 0 24px;font-weight:500;flex-shrink:0}
+.rec-card{flex:0 0 calc(100vw - 64px);max-width:420px;border-radius:28px;padding:28px 24px;margin:0 8px;
+  display:flex;flex-direction:column;gap:10px;min-height:300px;position:relative;overflow:hidden;
+  border:1px solid rgba(255,255,255,.08)}
+.rec-card .card-cat{display:inline-block;background:rgba(255,255,255,.15);backdrop-filter:blur(10px);
+  color:#fff;padding:6px 14px;border-radius:50px;font-size:11px;font-weight:700;align-self:flex-start;
+  font-family:'Unbounded',sans-serif;text-transform:uppercase;letter-spacing:1px}
+.rec-card .card-place{font-family:'Unbounded',sans-serif;font-size:clamp(22px,5.5vw,30px);font-weight:700;line-height:1.15;color:#fff}
+.rec-card .card-notes{font-size:15px;color:rgba(255,255,255,.7);line-height:1.5;flex:1}
+.rec-card .card-person{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;margin-top:auto;color:#fff}
+.rec-card .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  color:#fff;font-size:13px;font-weight:700;flex-shrink:0;box-shadow:0 0 0 2px rgba(255,255,255,.3)}
+.rec-card .card-links{display:flex;gap:12px;margin-top:6px}
+.rec-card .card-links a{color:rgba(255,255,255,.5);transition:color .15s}
+.rec-card .card-links a:active{color:#fff}
+.rec-card .card-links svg{width:22px;height:22px;fill:currentColor}
 
-/* SURPRISE */
-#surprise{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.8);display:flex;align-items:center;
-  justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;padding:24px}
+.dots{display:flex;justify-content:center;gap:6px;padding:16px 0 28px;flex-shrink:0}
+.dot{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,.2);transition:all .2s}
+.dot.active{background:#ff006e;width:24px;border-radius:4px}
+
+/* Card gradient backgrounds */
+.card-bg-0{background:linear-gradient(135deg,#1a1a2e,#2d1b4e)}
+.card-bg-1{background:linear-gradient(135deg,#1a2e1a,#1b4e2d)}
+.card-bg-2{background:linear-gradient(135deg,#2e1a1a,#4e1b2d)}
+.card-bg-3{background:linear-gradient(135deg,#1a1a2e,#1b2d4e)}
+.card-bg-4{background:linear-gradient(135deg,#2e2a1a,#4e3b1b)}
+
+/* ===== SURPRISE ===== */
+#surprise{position:fixed;inset:0;z-index:10;background:rgba(0,0,0,.9);display:flex;align-items:center;
+  justify-content:center;flex-direction:column;opacity:0;pointer-events:none;transition:opacity .2s;padding:24px}
 #surprise.show{opacity:1;pointer-events:auto}
-#surprise .surprise-card{transform:scale(.5) rotate(-10deg);transition:transform .5s cubic-bezier(.175,.885,.32,1.275);
+.surprise-slots{display:flex;gap:4px;margin-bottom:32px;height:60px;overflow:hidden}
+.slot-col{width:50px;height:60px;overflow:hidden;position:relative;border-radius:8px;background:rgba(255,255,255,.05)}
+.slot-reel{position:absolute;top:0;left:0;width:100%;transition:transform .5s cubic-bezier(.4,0,.2,1)}
+.slot-emoji{height:60px;display:flex;align-items:center;justify-content:center;font-size:32px}
+.surprise-result{transform:scale(0) rotate(-20deg);transition:transform .5s cubic-bezier(.175,.885,.32,1.275);
   max-width:420px;width:100%}
-#surprise.show .surprise-card{transform:scale(1) rotate(0)}
-.close-surprise{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.2);border:none;
-  color:#fff;font-size:28px;width:44px;height:44px;border-radius:50%;cursor:pointer;
-  display:flex;align-items:center;justify-content:center}
+#surprise.reveal .surprise-result{transform:scale(1) rotate(0)}
+.close-surprise{position:absolute;top:20px;right:20px;background:rgba(255,255,255,.1);border:none;
+  color:#fff;font-size:28px;width:48px;height:48px;border-radius:50%;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;transition:background .15s}
+.close-surprise:active{background:rgba(255,255,255,.2)}
 
-/* ALL VIEW */
-#allview{background:var(--bg);z-index:4;justify-content:flex-start;padding-top:20px;overflow-y:auto}
-.allview-header{width:100%;max-width:500px;display:flex;align-items:center;gap:12px;padding:0 8px;margin-bottom:16px}
-.allview-header h2{font-family:'Space Grotesk',sans-serif;font-size:22px}
-.all-list{width:100%;max-width:500px;padding:0 8px 32px;display:flex;flex-direction:column;gap:12px}
-.all-item{background:var(--card-bg);border-radius:16px;padding:16px 18px;box-shadow:0 2px 12px rgba(0,0,0,.06)}
-.all-item .ai-cat{font-size:11px;font-weight:700;color:var(--accent);text-transform:uppercase;letter-spacing:.5px}
-.all-item .ai-place{font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:17px;margin:4px 0}
-.all-item .ai-meta{font-size:13px;color:#888}
+/* Confetti */
+.confetti{position:fixed;top:-10px;z-index:11;pointer-events:none;animation:confettiFall linear forwards}
+@keyframes confettiFall{to{transform:translateY(110vh) rotate(720deg);opacity:0}}
+
+/* ===== ALL VIEW ===== */
+#allview{background:#0a0a1a;z-index:4;justify-content:flex-start;padding-top:20px;overflow-y:auto;
+  scrollbar-width:none;-ms-overflow-style:none}
+#allview::-webkit-scrollbar{display:none}
+.allview-header{width:100%;max-width:500px;display:flex;align-items:center;gap:12px;padding:0 16px;margin-bottom:16px}
+.allview-header h2{font-family:'Unbounded',sans-serif;font-size:18px}
+.all-list{width:100%;max-width:500px;padding:0 16px 32px;display:flex;flex-direction:column;gap:12px}
+.all-item{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:20px;
+  padding:18px 20px;backdrop-filter:blur(10px)}
+.all-item .ai-cat{font-size:11px;font-weight:700;color:#ff006e;text-transform:uppercase;letter-spacing:1px;
+  font-family:'Unbounded',sans-serif}
+.all-item .ai-place{font-family:'Unbounded',sans-serif;font-weight:700;font-size:16px;margin:6px 0}
+.all-item .ai-meta{font-size:13px;color:rgba(255,255,255,.5)}
+.all-item .ai-meta a{color:#00f5d4}
+
+/* Easter egg */
+.shake{animation:shake .4s ease-in-out}
+@keyframes shake{0%,100%{transform:rotate(0)}25%{transform:rotate(-5deg)}75%{transform:rotate(5deg)}}
 </style>
 </head>
 <body>
 
+<canvas id="bgCanvas"></canvas>
+
 <!-- LANDING -->
 <div id="landing" class="screen active">
+  <div class="landing-bg">
+    <div class="orb"></div><div class="orb"></div><div class="orb"></div>
+  </div>
   <div class="landing-content">
-    <div class="brand">wud</div>
+    <div class="brand" id="brand">wud</div>
     <div class="tagline"><span class="typed" id="typed"></span></div>
-    <button class="cta-btn" onclick="goTo('vibes')">let's go →</button>
+    <button class="cta-btn" onclick="goTo('vibes')">LET'S GO 🔥</button>
   </div>
 </div>
 
 <!-- VIBES -->
 <div id="vibes" class="screen hidden-right">
-  <div class="vibes-title">pick your vibe ✨</div>
+  <div class="vibes-title">pick your vibe 🎯</div>
+  <div class="vibes-sub">tap one. trust us.</div>
   <div class="vibes-grid" id="vibesGrid"></div>
-  <button class="surprise-btn" onclick="surpriseMe()">🎲 surprise me</button>
+  <button class="surprise-btn" onclick="surpriseMe()">🎰 SURPRISE ME</button>
 </div>
 
 <!-- RESULTS -->
@@ -136,12 +198,12 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
   <div class="results-header">
     <button class="back-btn" onclick="goTo('vibes')">←</button>
     <span class="results-vibe" id="resultsTitle"></span>
-    <button class="show-all-link" onclick="showAll()">show all</button>
+    <button class="show-all-link" onclick="showAll()">show all →</button>
   </div>
   <div class="carousel-wrap">
     <div class="carousel" id="carousel"></div>
   </div>
-  <div class="counter" id="counter"></div>
+  <div class="dots" id="dots"></div>
 </div>
 
 <!-- ALL VIEW -->
@@ -156,8 +218,9 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 <!-- SURPRISE OVERLAY -->
 <div id="surprise">
   <button class="close-surprise" onclick="closeSurprise()">×</button>
-  <div class="surprise-card">
-    <div class="rec-card" id="surpriseContent"></div>
+  <div class="surprise-slots" id="slots"></div>
+  <div class="surprise-result">
+    <div class="rec-card card-bg-2" id="surpriseContent"></div>
   </div>
 </div>
 
@@ -165,19 +228,21 @@ html,body{height:100%;overflow:hidden;font-family:'DM Sans',sans-serif;backgroun
 const RECS=[{"place":"Ground Cafe","category":"Breakfast","recommendedBy":"Calvin Branson","notes":"English breakfast with 2 extra eggs is the way to go","website":"https://www.groundartcaffe.co.za/","instagram":"https://www.instagram.com/groundartcaffe/"},{"place":"Spar salad","category":"Lunch","recommendedBy":"Calvin Branson","notes":"Quick easy healthy lunch","website":"","instagram":""},{"place":"Galileo Open Air Cinema","category":"Entertainment","recommendedBy":"Calvin Branson","notes":"Froth for a Galileo open air cinema eve","website":"https://thegalileo.co.za/","instagram":"https://www.instagram.com/thegalileo/"},{"place":"Iron Tiger","category":"Fitness","recommendedBy":"Calvin Branson","notes":"Morning Muay Thai","website":"https://irontiger.co.za/","instagram":"https://www.instagram.com/irontigerct/"},{"place":"Gios Dinner at Bakoven","category":"Dinner","recommendedBy":"Calvin Branson","notes":"Post-work sunset, out on the rocks","website":"","instagram":""},{"place":"Greenpoint Tennis + Stepbrothers","category":"Activity + Food","recommendedBy":"Spencer Kyle","notes":"Tennis then beer and pizza/pasta","website":"https://www.stepbrothers.co.za","instagram":"https://www.instagram.com/stepbrothers_cpt/"},{"place":"Running Late Club","category":"Social + Fitness","recommendedBy":"Spencer Kyle","notes":"Socialise + run + swim + dinner every random Wednesday","website":"https://www.runninglateclub.com/","instagram":"https://www.instagram.com/runninglateclub/"},{"place":"Lions Head Loop","category":"Hiking","recommendedBy":"Spencer Kyle","notes":"Also recommended by Poppy Strange, Cally Frost","website":"","instagram":""},{"place":"Camps Bay Tidal Pool","category":"Swimming","recommendedBy":"Spencer Kyle","notes":"After running to Apostles and back","website":"","instagram":""},{"place":"Modular","category":"Nightlife","recommendedBy":"Spencer Kyle","notes":"","website":"https://modularclub.com/","instagram":"https://www.instagram.com/modular_cape_town/"},{"place":"Oranjezicht Night Market","category":"Market","recommendedBy":"Emma Cockbain","notes":"After Running Late Club","website":"https://ozcf.co.za/","instagram":"https://www.instagram.com/ozcfarm/"},{"place":"Labia Theatre Specials","category":"Entertainment","recommendedBy":"Emma Cockbain","notes":"They often do collabs with restaurants","website":"https://www.thelabia.co.za/","instagram":"https://www.instagram.com/thelabia/"},{"place":"Brunch at The Vineyard Hotel","category":"Brunch","recommendedBy":"Emma Cockbain","notes":"","website":"https://www.vineyard.co.za/","instagram":"https://www.instagram.com/vineyard_hotel/"},{"place":"Run along Chapmans Peak + South Yeaster Bakery","category":"Running + Coffee","recommendedBy":"Emma Cockbain","notes":"","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Sunset at Leopard Bar, Twelve Apostles","category":"Drinks","recommendedBy":"Emma Cockbain","notes":"","website":"https://12apostleshotel.com/","instagram":"https://www.instagram.com/12apostleshotel/"},{"place":"Braai and Swim at Oudekraal","category":"Beach","recommendedBy":"Emma Cockbain","notes":"Also recommended by Danika","website":"","instagram":""},{"place":"Running towards Hout Bay","category":"Running","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Breakfast Croissant at South Yeaster","category":"Breakfast","recommendedBy":"Keagan Stokoe","notes":"","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Sneak friends onto the Blue Bus","category":"Activity","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Beach day at The Glen","category":"Beach","recommendedBy":"Keagan Stokoe","notes":"","website":"","instagram":""},{"place":"Gin Bar","category":"Drinks","recommendedBy":"Keagan Stokoe","notes":"","website":"https://www.theginbar.co.za/","instagram":"https://www.instagram.com/theginbar/"},{"place":"Bodega Ramen","category":"Dinner","recommendedBy":"Keagan Stokoe","notes":"Also recommended by Dayna Green","website":"","instagram":"https://www.instagram.com/bodega_ct/"},{"place":"Golf at The Met","category":"Sport","recommendedBy":"Ben Dryden","notes":"","website":"https://metropolitangolfclub.co.za/","instagram":"https://www.instagram.com/metropolitan_golf_club/"},{"place":"Hazendal Driving Range","category":"Sport + Drinks","recommendedBy":"Ben Dryden","notes":"Driving range and beers","website":"https://www.hazendal.co.za/","instagram":"https://www.instagram.com/hazendal_estate/"},{"place":"Green Point Park Picnic","category":"Activity","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":""},{"place":"Ouzeri","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://www.ouzeri.co.za/","instagram":"https://www.instagram.com/ouzeri_ct/"},{"place":"Nikkei","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://nikkei.co.za/","instagram":"https://www.instagram.com/nikkei_za/"},{"place":"Prom Run + Saunders Dip + Vagabonds Breakfast Wrap","category":"Running + Food","recommendedBy":"Ben Dryden","notes":"So naughty","website":"https://www.vagabondkitchens.co.za/","instagram":"https://www.instagram.com/vagabondcpt/"},{"place":"Norfolk Crookie","category":"Coffee + Treats","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/norfolk.deli/"},{"place":"Zuney Burger","category":"Food + Drinks","recommendedBy":"Ben Dryden","notes":"Burger + beers","website":"https://www.zuneyburgers.com/","instagram":"https://www.instagram.com/zuneywagyu/"},{"place":"Only Fools Rooftop Bar","category":"Drinks + Food","recommendedBy":"Ben Dryden","notes":"Burger on rooftop. Also recommended by Danika","website":"https://onlyfools.co.za/","instagram":"https://www.instagram.com/onlyfoolsct/"},{"place":"Upper Union","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"https://www.upperunion.co.za/","instagram":"https://www.instagram.com/upperunion_restaurant/"},{"place":"House of Machines","category":"Drinks + Food","recommendedBy":"Ben Dryden","notes":"Bezza + burger","website":"https://thehouseofmachines.com/","instagram":"https://www.instagram.com/thehouseofmachines_cpt/"},{"place":"Kiki","category":"Dinner","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/kiki.cpt/"},{"place":"Constantia Nek Hike into Kirstenbosch","category":"Hiking","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":""},{"place":"Beau Constantia + Buitenverwachting Lawns","category":"Wine Farm","recommendedBy":"Ben Dryden","notes":"Daybender","website":"https://www.beauconstantia.com/","instagram":"https://www.instagram.com/beauconstantia/"},{"place":"Cafe Sofi","category":"Coffee","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/cafesofi_sa/"},{"place":"Rosettas","category":"Coffee","recommendedBy":"Ben Dryden","notes":"","website":"https://www.rosettaroastery.com/","instagram":"https://www.instagram.com/rosettaroastery/"},{"place":"OnePark","category":"Drinks","recommendedBy":"Ben Dryden","notes":"","website":"","instagram":"https://www.instagram.com/one_park_cpt/"},{"place":"Innovation City","category":"Workspace","recommendedBy":"Ben Dryden","notes":"","website":"https://innovationcity.co.za/","instagram":"https://www.instagram.com/innovationcitycpt/"},{"place":"Ideas Cartel + W17","category":"Workspace","recommendedBy":"Ben Dryden","notes":"","website":"https://www.ideascartel.com/","instagram":"https://www.instagram.com/ideascartel/"},{"place":"Stepbrothers Pizza in Green Point Park","category":"Food","recommendedBy":"Cally Frost","notes":"","website":"https://www.stepbrothers.co.za","instagram":"https://www.instagram.com/stepbrothers_cpt/"},{"place":"Saunders to South Yeaster Run","category":"Running + Coffee","recommendedBy":"Cally Frost","notes":"Run and coffee after","website":"https://www.southyeaster.co.za","instagram":"https://www.instagram.com/southyeaster/"},{"place":"Mesquite + Carrot Cake at Strangers Club","category":"Coffee + Treats","recommendedBy":"Cally Frost","notes":"","website":"https://thestrangersclub.co.za/","instagram":"https://www.instagram.com/thestrangersclubct/"},{"place":"Missing Link Trail Run","category":"Running","recommendedBy":"Cally Frost","notes":"","website":"","instagram":""},{"place":"Chapmans Peak Drive to Chapman Peak Hotel","category":"Food","recommendedBy":"Cally Frost","notes":"Fish and chips","website":"https://www.chapmanspeakhotel.co.za/","instagram":""},{"place":"Babylonstoren","category":"Day Trip","recommendedBy":"Isabella Watterson","notes":"","website":"https://babylonstoren.com/","instagram":"https://www.instagram.com/babylonstoren/"},{"place":"yoga(space)","category":"Fitness","recommendedBy":"Isabella Watterson","notes":"","website":"https://www.yogaspace.co.za/","instagram":"https://www.instagram.com/yogaspace____/"},{"place":"Strauss and Co Art Club","category":"Art + Culture","recommendedBy":"Isabella Watterson","notes":"","website":"https://www.straussart.co.za/","instagram":"https://www.instagram.com/strauss_and_co/"},{"place":"Art School Africa - Collectors Club","category":"Art + Culture","recommendedBy":"Isabella Watterson","notes":"Also recommended by Poppy Strange","website":"https://artschoolafrica.com/","instagram":"https://www.instagram.com/artschoolafrica/"},{"place":"Not So Fast Run Club","category":"Running","recommendedBy":"Isabella Watterson","notes":"Wednesday and Saturday","website":"","instagram":"https://www.instagram.com/notsofast.runningclub.ct/"},{"place":"Akra","category":"Drinks","recommendedBy":"Isabella Watterson","notes":"New cocktail bar","website":"","instagram":"https://www.instagram.com/akra_bar/"},{"place":"The Focaccia Bar","category":"Food","recommendedBy":"Isabella Watterson","notes":"","website":"","instagram":"https://www.instagram.com/the_focacciabar/"},{"place":"Lellos","category":"Coffee + Food","recommendedBy":"Isabella Watterson","notes":"Coffee and croissant","website":"","instagram":"https://www.instagram.com/lellosdeli/"},{"place":"Ceremony","category":"Coffee","recommendedBy":"Isabella Watterson","notes":"Cornflake matcha","website":"","instagram":"https://www.instagram.com/ceremonysouthafrica/"},{"place":"Horizon Gym Free Workouts","category":"Fitness","recommendedBy":"Isabella Watterson","notes":"Weekly workouts on the prom","website":"https://www.horizengym.com/","instagram":"https://www.instagram.com/horizenza/"},{"place":"Espresso Lab","category":"Coffee + Workspace","recommendedBy":"Dayna Green","notes":"Remote working and interesting coffee","website":"https://espressolabmicroroasters.com/","instagram":"https://www.instagram.com/espressolabza/"},{"place":"The Outlore","category":"Entertainment","recommendedBy":"Dayna Green","notes":"Immersive dance shows/experiences","website":"https://theoutlore.com/","instagram":"https://www.instagram.com/theoutlore/"},{"place":"Sculp/Barre at Ivy Room and Novacore","category":"Fitness","recommendedBy":"Dayna Green","notes":"","website":"https://www.theivyroom.co.za/","instagram":"https://www.instagram.com/theivyroom/"},{"place":"Cocktails at Rockpool","category":"Drinks","recommendedBy":"Dayna Green","notes":"","website":"https://www.rockpoolct.co.za/","instagram":"https://www.instagram.com/rockpoolct/"},{"place":"Bao Down","category":"Dinner","recommendedBy":"Poppy Strange","notes":"Dont skip the Miso Tart for pud!","website":"https://www.baodowncapetown.com/","instagram":"https://www.instagram.com/baodownrestaurant/"},{"place":"Moro Gelato","category":"Dessert","recommendedBy":"Poppy Strange","notes":"","website":"https://www.morogelato.co.za/","instagram":"https://www.instagram.com/morogelato/"},{"place":"Strangers Club","category":"Coffee","recommendedBy":"Poppy Strange","notes":"Also recommended by Cally Frost","website":"https://thestrangersclub.co.za/","instagram":"https://www.instagram.com/thestrangersclubct/"},{"place":"Plato Coffee Frezos","category":"Coffee","recommendedBy":"Poppy Strange","notes":"Recent discovery","website":"https://plato.coffee/","instagram":"https://www.instagram.com/plato.coffee/"},{"place":"Rust En Vrede","category":"Dinner","recommendedBy":"Poppy Strange","notes":"Outside Stellenbosch, best steak and chips","website":"https://rustenvrede.com/","instagram":"https://www.instagram.com/rustenvrede1694/"},{"place":"Constantia Nek to De Villiers Dam","category":"Hiking","recommendedBy":"Poppy Strange","notes":"Stunning views and a dip","website":"","instagram":""},{"place":"Jonkershoek Waterfall Hike","category":"Hiking","recommendedBy":"Poppy Strange","notes":"","website":"","instagram":""},{"place":"Disa Beach at Cape Point","category":"Beach","recommendedBy":"Poppy Strange","notes":"On a windless day!","website":"","instagram":""},{"place":"Hot Huts / Go Sauna","category":"Wellness","recommendedBy":"Poppy Strange","notes":"Mobile saunas next to Saunders or Camps Bay Tidal Pool","website":"https://hothuts.co.za/","instagram":"https://www.instagram.com/hothutsza/"},{"place":"Bodhi Breathwork in Hout Bay","category":"Wellness","recommendedBy":"Poppy Strange","notes":"Astrology and breathwork","website":"https://www.bodhibreathwork.com/","instagram":"https://www.instagram.com/bodhi_breathwork/"},{"place":"OneFlow","category":"Fitness","recommendedBy":"Poppy Strange","notes":"Sculpt","website":"https://www.oneflow.co.za/","instagram":"https://www.instagram.com/oneflowcapetown/"},{"place":"The Movement Lab","category":"Fitness","recommendedBy":"Poppy Strange","notes":"Pilates","website":"https://www.themovementlab.co.za/","instagram":"https://www.instagram.com/themovementlab_sa/"},{"place":"Shirley Fintz at Shangrila / Karienne Belle","category":"Shopping","recommendedBy":"Poppy Strange","notes":"Unique fashion finds, open days or appointments only","website":"","instagram":"https://www.instagram.com/shirleyfintz/"},{"place":"Afrika Burn","category":"Festival","recommendedBy":"Poppy Strange","notes":"","website":"https://www.afrikaburn.org/","instagram":"https://www.instagram.com/afrikaburn/"},{"place":"Evening Tennis + Step Brothers Dinner","category":"Activity + Food","recommendedBy":"Danika","notes":"","website":"","instagram":""},{"place":"Drinks at Only Fools + Dinner at Sundoo","category":"Drinks + Dinner","recommendedBy":"Danika","notes":"","website":"https://sundoo.co.za/","instagram":"https://www.instagram.com/sundooindiantapas/"},{"place":"Bootleggers R29 Coffee + Prom Walk","category":"Coffee + Activity","recommendedBy":"Danika","notes":"Morning walk","website":"https://www.bootlegger.coffee/","instagram":"https://www.instagram.com/bootleggercoffeecompany/"},{"place":"Clifton 2nd Beach","category":"Beach","recommendedBy":"Danika","notes":"With spikeball for extra fun","website":"","instagram":""},{"place":"Self-proclaimed Best Coffee in the World","category":"Coffee","recommendedBy":"Spencer Kyle","notes":"Google Maps link shared","website":"","instagram":""}];
 
 const VIBES=[
-  {emoji:'🍽️',label:'feed me',cats:['Breakfast','Brunch','Lunch','Dinner','Food','Dessert','Food + Drinks','Running + Food']},
-  {emoji:'☕',label:'caffeine fix',cats:['Coffee','Coffee + Treats','Coffee + Food','Coffee + Workspace','Coffee + Activity','Running + Coffee']},
-  {emoji:'🍸',label:"drinks o'clock",cats:['Drinks','Drinks + Food','Drinks + Dinner','Nightlife','Sport + Drinks']},
-  {emoji:'🏃',label:'get moving',cats:['Running','Fitness','Hiking','Swimming','Sport','Social + Fitness']},
-  {emoji:'🏖️',label:'beach bum',cats:['Beach']},
-  {emoji:'🎨',label:'culture vulture',cats:['Art + Culture','Entertainment','Festival']},
-  {emoji:'🌿',label:'treat yourself',cats:['Wellness','Wine Farm','Day Trip','Shopping']},
-  {emoji:'🎾',label:'do something',cats:['Activity','Activity + Food','Market','Workspace']}
+  {emoji:'🍽️',label:'feed me',sub:'you\'re hangry and we get it 🍕',cats:['Breakfast','Brunch','Lunch','Dinner','Food','Dessert','Food + Drinks','Running + Food']},
+  {emoji:'☕',label:'caffeine fix',sub:'bean juice or matcha, no judgement',cats:['Coffee','Coffee + Treats','Coffee + Food','Coffee + Workspace','Coffee + Activity','Running + Coffee']},
+  {emoji:'🍸',label:"drinks o'clock",sub:'sundowners? cocktails? say less 🥂',cats:['Drinks','Drinks + Food','Drinks + Dinner','Nightlife','Sport + Drinks']},
+  {emoji:'🏃',label:'get moving',sub:'sweat now, brag later 💪',cats:['Running','Fitness','Hiking','Swimming','Sport','Social + Fitness']},
+  {emoji:'🏖️',label:'beach bum',sub:'sand between your toes energy 🌊',cats:['Beach']},
+  {emoji:'🎨',label:'culture vulture',sub:'artsy fartsy and proud of it',cats:['Art + Culture','Entertainment','Festival']},
+  {emoji:'🌿',label:'treat yourself',sub:'because you deserve it bestie 💅',cats:['Wellness','Wine Farm','Day Trip','Shopping']},
+  {emoji:'🎾',label:'do something',sub:'touch grass, meet humans',cats:['Activity','Activity + Food','Market','Workspace']}
 ];
 
-const PERSON_COLORS=['#FF6B6B','#4ECDC4','#A855F7','#3B82F6','#EC4899','#F97316','#10B981','#FFE66D','#06B6D4','#F43F5E'];
+const PERSON_COLORS=['#ff006e','#00f5d4','#8b5cf6','#3b82f6','#f72585','#f97316','#10b981','#facc15','#06b6d4','#ef4444'];
 const personColorMap={};
 [...new Set(RECS.map(r=>r.recommendedBy))].sort().forEach((p,i)=>personColorMap[p]=PERSON_COLORS[i%PERSON_COLORS.length]);
+
+const CARD_BGS=['card-bg-0','card-bg-1','card-bg-2','card-bg-3','card-bg-4'];
 
 let currentScreen='landing';
 let currentVibe=null;
@@ -185,30 +250,64 @@ let currentRecs=[];
 let carouselIdx=0;
 let touchStartX=0,touchDeltaX=0,isDragging=false;
 
-// Typing animation
-const phrases=["wud you like to do?","where should we go?","what's the vibe?"];
+// === PARTICLES ===
+const canvas=document.getElementById('bgCanvas');
+const ctx=canvas.getContext('2d');
+let particles=[];
+function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight}
+resizeCanvas();
+window.addEventListener('resize',resizeCanvas);
+
+for(let i=0;i<40;i++){
+  particles.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,
+    vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,
+    r:Math.random()*3+1,color:`hsla(${Math.random()*360},80%,60%,.3)`});
+}
+function drawParticles(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0)p.x=canvas.width;if(p.x>canvas.width)p.x=0;
+    if(p.y<0)p.y=canvas.height;if(p.y>canvas.height)p.y=0;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fillStyle=p.color;ctx.fill();
+  });
+  requestAnimationFrame(drawParticles);
+}
+drawParticles();
+
+// === TYPING ===
+const phrases=["wud you like to do?","where should we go?","what's the vibe?","who's got recs?"];
 let phraseIdx=0,charIdx=0,deleting=false;
 function typeLoop(){
   const el=document.getElementById('typed');
   const phrase=phrases[phraseIdx];
   if(!deleting){
     el.textContent=phrase.slice(0,++charIdx);
-    if(charIdx===phrase.length){deleting=true;setTimeout(typeLoop,2000);return}
+    if(charIdx===phrase.length){deleting=true;setTimeout(typeLoop,1800);return}
   }else{
     el.textContent=phrase.slice(0,--charIdx);
     if(charIdx===0){deleting=false;phraseIdx=(phraseIdx+1)%phrases.length}
   }
-  setTimeout(typeLoop,deleting?40:80);
+  setTimeout(typeLoop,deleting?30:60);
 }
 typeLoop();
 
-// Build vibe tiles
+// === Easter egg: tap brand 5 times ===
+let brandTaps=0;
+document.getElementById('brand').addEventListener('click',()=>{
+  brandTaps++;
+  document.getElementById('brand').classList.add('shake');
+  setTimeout(()=>document.getElementById('brand').classList.remove('shake'),400);
+  if(brandTaps>=5){brandTaps=0;spawnConfetti(20)}
+});
+
+// === BUILD VIBES ===
 const grid=document.getElementById('vibesGrid');
 VIBES.forEach((v,i)=>{
   const count=RECS.filter(r=>v.cats.includes(r.category)).length;
   const tile=document.createElement('button');
   tile.className='vibe-tile';
-  tile.innerHTML=`<span class="emoji">${v.emoji}</span><span class="label">${v.label}</span><span class="count">${count} spots</span>`;
+  tile.innerHTML=`<span class="emoji">${v.emoji}</span><span class="label">${v.label}</span><span class="vibe-sub">${v.sub}</span><span class="count">${count} spots</span>`;
   tile.onclick=()=>selectVibe(i);
   grid.appendChild(tile);
 });
@@ -216,16 +315,25 @@ VIBES.forEach((v,i)=>{
 function goTo(screen){
   const prev=document.getElementById(currentScreen);
   const next=document.getElementById(screen);
-  const goingForward=['landing','vibes','results','allview'];
-  const forward=goingForward.indexOf(screen)>goingForward.indexOf(currentScreen);
+  const order=['landing','vibes','results','allview'];
+  const forward=order.indexOf(screen)>order.indexOf(currentScreen);
   prev.className='screen '+(forward?'hidden-left':'hidden-right');
   next.className='screen active';
   currentScreen=screen;
+  // Re-trigger tile animations when going to vibes
+  if(screen==='vibes'){
+    document.querySelectorAll('.vibe-tile').forEach((t,i)=>{
+      t.style.animation='none';t.offsetHeight;
+      t.style.animation=`tileIn .4s cubic-bezier(.175,.885,.32,1.275) ${i*.05}s forwards`;
+    });
+  }
 }
 
 function selectVibe(i){
   currentVibe=VIBES[i];
   currentRecs=RECS.filter(r=>currentVibe.cats.includes(r.category));
+  // Shuffle for freshness
+  currentRecs.sort(()=>Math.random()-.5);
   carouselIdx=0;
   document.getElementById('resultsTitle').textContent=currentVibe.emoji+' '+currentVibe.label;
   buildCarousel();
@@ -235,20 +343,21 @@ function selectVibe(i){
 function buildCarousel(){
   const c=document.getElementById('carousel');
   c.innerHTML='';
-  currentRecs.forEach(r=>{c.appendChild(makeCard(r))});
+  currentRecs.forEach((r,i)=>{c.appendChild(makeCard(r,i))});
   updateCarousel();
+  updateDots();
 }
 
-function makeCard(r){
+function makeCard(r,idx){
   const d=document.createElement('div');
-  d.className='rec-card';
+  d.className='rec-card '+CARD_BGS[(idx||0)%CARD_BGS.length];
   d.innerHTML=`
     <span class="card-cat">${r.category}</span>
     <div class="card-place">${r.place}</div>
-    ${r.notes?`<div class="card-notes">${r.notes}</div>`:'<div class="card-notes" style="flex:1"></div>'}
+    ${r.notes?`<div class="card-notes">"${r.notes}"</div>`:'<div class="card-notes" style="flex:1"></div>'}
     <div class="card-person">
       <span class="avatar" style="background:${personColorMap[r.recommendedBy]}">${r.recommendedBy.split(' ').map(w=>w[0]).join('')}</span>
-      ${r.recommendedBy}
+      ${r.recommendedBy} says go here
     </div>
     <div class="card-links">
       ${r.website?`<a href="${r.website}" target="_blank"><svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg></a>`:''}
@@ -257,12 +366,24 @@ function makeCard(r){
   return d;
 }
 
+function updateDots(){
+  const dotsEl=document.getElementById('dots');
+  dotsEl.innerHTML='';
+  const max=Math.min(currentRecs.length,15);
+  for(let i=0;i<currentRecs.length;i++){
+    if(currentRecs.length>15&&i>0&&i<currentRecs.length-1&&Math.abs(i-carouselIdx)>3)continue;
+    const dot=document.createElement('div');
+    dot.className='dot'+(i===carouselIdx?' active':'');
+    dot.onclick=()=>{carouselIdx=i;updateCarousel();updateDots()};
+    dotsEl.appendChild(dot);
+  }
+}
+
 function updateCarousel(){
   const c=document.getElementById('carousel');
   const cardW=Math.min(window.innerWidth-64,420)+16;
-  const offset=-carouselIdx*cardW;
-  c.style.transform=`translateX(${offset}px)`;
-  document.getElementById('counter').textContent=`${carouselIdx+1} of ${currentRecs.length} spots`;
+  c.style.transform=`translateX(${-carouselIdx*cardW}px)`;
+  updateDots();
 }
 
 // Touch swipe
@@ -270,21 +391,21 @@ const wrap=document.querySelector('.carousel-wrap');
 wrap.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;isDragging=true;
   document.getElementById('carousel').classList.add('no-transition')},{passive:true});
 wrap.addEventListener('touchmove',e=>{if(!isDragging)return;touchDeltaX=e.touches[0].clientX-touchStartX;
-  const cardW=Math.min(window.innerWidth-64,420)+16;const base=-carouselIdx*cardW;
-  document.getElementById('carousel').style.transform=`translateX(${base+touchDeltaX}px)`},{passive:true});
+  const cardW=Math.min(window.innerWidth-64,420)+16;
+  document.getElementById('carousel').style.transform=`translateX(${-carouselIdx*cardW+touchDeltaX}px)`},{passive:true});
 wrap.addEventListener('touchend',()=>{if(!isDragging)return;isDragging=false;
   document.getElementById('carousel').classList.remove('no-transition');
   if(touchDeltaX<-50&&carouselIdx<currentRecs.length-1)carouselIdx++;
   else if(touchDeltaX>50&&carouselIdx>0)carouselIdx--;
   touchDeltaX=0;updateCarousel()});
 
-// Mouse swipe fallback
+// Mouse swipe
 let mouseDown=false,mouseStartX=0;
 wrap.addEventListener('mousedown',e=>{mouseDown=true;mouseStartX=e.clientX;
   document.getElementById('carousel').classList.add('no-transition')});
 wrap.addEventListener('mousemove',e=>{if(!mouseDown)return;const dx=e.clientX-mouseStartX;
-  const cardW=Math.min(window.innerWidth-64,420)+16;const base=-carouselIdx*cardW;
-  document.getElementById('carousel').style.transform=`translateX(${base+dx}px)`});
+  const cardW=Math.min(window.innerWidth-64,420)+16;
+  document.getElementById('carousel').style.transform=`translateX(${-carouselIdx*cardW+dx}px)`});
 wrap.addEventListener('mouseup',e=>{if(!mouseDown)return;mouseDown=false;
   document.getElementById('carousel').classList.remove('no-transition');
   const dx=e.clientX-mouseStartX;
@@ -292,15 +413,66 @@ wrap.addEventListener('mouseup',e=>{if(!mouseDown)return;mouseDown=false;
   else if(dx>50&&carouselIdx>0)carouselIdx--;
   updateCarousel()});
 
+// === SURPRISE ME (slot machine) ===
 function surpriseMe(){
-  const r=RECS[Math.floor(Math.random()*RECS.length)];
-  const el=document.getElementById('surpriseContent');
-  const card=makeCard(r);
-  el.innerHTML=card.innerHTML;
-  el.className=card.className;
-  document.getElementById('surprise').classList.add('show');
+  const el=document.getElementById('surprise');
+  const result=RECS[Math.floor(Math.random()*RECS.length)];
+  el.classList.add('show');
+  el.classList.remove('reveal');
+
+  // Build slots
+  const slotsEl=document.getElementById('slots');
+  const emojis=['🍽️','☕','🍸','🏃','🏖️','🎨','🌿','🎾','🔥','💃','🎵','🌈','⚡','🎪','🦩'];
+  slotsEl.innerHTML='';
+  for(let c=0;c<5;c++){
+    const col=document.createElement('div');col.className='slot-col';
+    const reel=document.createElement('div');reel.className='slot-reel';
+    const items=12;
+    for(let r=0;r<items;r++){
+      const slot=document.createElement('div');slot.className='slot-emoji';
+      slot.textContent=emojis[Math.floor(Math.random()*emojis.length)];
+      reel.appendChild(slot);
+    }
+    col.appendChild(reel);slotsEl.appendChild(col);
+    // Animate
+    reel.style.transform='translateY(0)';
+    reel.offsetHeight;
+    reel.style.transition=`transform ${.8+c*.15}s cubic-bezier(.1,.8,.2,1)`;
+    reel.style.transform=`translateY(-${(items-1)*60}px)`;
+  }
+
+  // Reveal after slots
+  setTimeout(()=>{
+    const content=document.getElementById('surpriseContent');
+    const card=makeCard(result,0);
+    content.innerHTML=card.innerHTML;
+    content.className=card.className;
+    el.classList.add('reveal');
+    spawnConfetti(30);
+  },1600);
 }
-function closeSurprise(){document.getElementById('surprise').classList.remove('show')}
+
+function closeSurprise(){
+  document.getElementById('surprise').classList.remove('show');
+  document.getElementById('surprise').classList.remove('reveal');
+}
+
+function spawnConfetti(count){
+  const colors=['#ff006e','#facc15','#00f5d4','#8b5cf6','#3b82f6','#f97316','#ef4444','#10b981'];
+  for(let i=0;i<count;i++){
+    const c=document.createElement('div');
+    c.className='confetti';
+    c.style.left=Math.random()*100+'%';
+    c.style.width=Math.random()*10+6+'px';
+    c.style.height=Math.random()*10+6+'px';
+    c.style.background=colors[Math.floor(Math.random()*colors.length)];
+    c.style.borderRadius=Math.random()>.5?'50%':'2px';
+    c.style.animationDuration=Math.random()*2+1.5+'s';
+    c.style.animationDelay=Math.random()*.5+'s';
+    document.body.appendChild(c);
+    setTimeout(()=>c.remove(),4000);
+  }
+}
 
 function showAll(){
   document.getElementById('allTitle').textContent=currentVibe.emoji+' all '+currentVibe.label+' spots';
