@@ -103,8 +103,8 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .carousel.no-transition{transition:none}
 
 .rec-card{flex:0 0 calc(100vw - 64px);max-width:420px;border-radius:28px;padding:28px 24px;margin:0 8px;
-  display:flex;flex-direction:column;gap:10px;min-height:300px;position:relative;overflow:hidden;
-  border:1px solid rgba(26,26,46,.08);box-shadow:0 4px 24px rgba(26,26,46,.08)}
+  display:flex;flex-direction:column;gap:10px;min-height:300px;position:relative;overflow:visible;
+  box-shadow:0 4px 24px rgba(26,26,46,.08)}
 .rec-card .card-cat{display:inline-block;background:rgba(255,255,255,.7);backdrop-filter:blur(10px);
   color:#1a1a2e;padding:6px 14px;border-radius:50px;font-size:11px;font-weight:700;align-self:flex-start;
   font-family:'Unbounded',sans-serif;text-transform:uppercase;letter-spacing:1px}
@@ -163,6 +163,106 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .all-item .ai-place{font-family:'Unbounded',sans-serif;font-weight:700;font-size:16px;margin:6px 0}
 .all-item .ai-meta{font-size:13px;color:rgba(26,26,46,.5)}
 .all-item .ai-meta a{color:#8b5cf6}
+
+/* ===== ANIMATED CARD BORDERS ===== */
+@property --angle {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+
+.rec-card, .all-item {
+  position: relative;
+  overflow: visible;
+  border: none !important;
+  z-index: 0;
+}
+
+.rec-card::before, .all-item::before {
+  content: '';
+  position: absolute;
+  inset: -3px;
+  border-radius: 31px; /* card 28px + 3px */
+  background: conic-gradient(from var(--angle), #ff006e, #8b5cf6, #00f5d4, #facc15, #ff006e);
+  z-index: -1;
+  animation: rotateBorder var(--border-speed, 10s) linear infinite;
+  opacity: 0.7;
+  transition: opacity 0.3s ease;
+}
+
+.all-item::before {
+  border-radius: 23px; /* 20px + 3px */
+}
+
+@keyframes rotateBorder {
+  to { --angle: 360deg; }
+}
+
+/* Stagger speeds per card for organic feel */
+.rec-card:nth-child(1) { --border-speed: 8s; }
+.rec-card:nth-child(2) { --border-speed: 10s; }
+.rec-card:nth-child(3) { --border-speed: 12s; }
+.rec-card:nth-child(4) { --border-speed: 9s; }
+.rec-card:nth-child(5) { --border-speed: 11s; }
+.rec-card:nth-child(6) { --border-speed: 7s; }
+.rec-card:nth-child(7) { --border-speed: 13s; }
+.rec-card:nth-child(8) { --border-speed: 8.5s; }
+
+.all-item:nth-child(odd) { --border-speed: 10s; }
+.all-item:nth-child(even) { --border-speed: 12s; }
+
+/* Hover: speed up + brighten */
+.rec-card:hover::before, .all-item:hover::before {
+  opacity: 1;
+  animation-duration: 3s;
+}
+
+/* Card breathing animation */
+.rec-card {
+  animation: cardBreathe 6s ease-in-out infinite;
+}
+.rec-card:nth-child(even) { animation-delay: -3s; }
+
+@keyframes cardBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.004); }
+}
+
+/* Category badge shimmer */
+.rec-card .card-cat {
+  position: relative;
+  overflow: hidden;
+}
+.rec-card .card-cat::after {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 60%; height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.5), transparent);
+  animation: shimmer 4s ease-in-out infinite;
+}
+@keyframes shimmer {
+  0%, 100% { left: -100%; }
+  50% { left: 150%; }
+}
+
+/* Links stay clickable above pseudo-element */
+.rec-card .card-links a, .all-item a {
+  position: relative;
+  z-index: 10;
+}
+
+/* Ensure card content is above the border pseudo-element */
+.rec-card > *, .all-item > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Surprise card also gets the treatment */
+#surprise .rec-card::before {
+  animation-duration: 6s;
+  opacity: 0.9;
+}
 
 /* Easter egg */
 .shake{animation:shake .4s ease-in-out}
