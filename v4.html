@@ -113,10 +113,10 @@ canvas#bgCanvas{position:fixed;inset:0;z-index:0;pointer-events:none}
 .rec-card .card-person{display:flex;align-items:center;gap:10px;font-size:15px;font-weight:700;margin-top:auto;color:#1a1a2e}
 .rec-card .avatar{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;
   color:#fff;font-size:13px;font-weight:700;flex-shrink:0;box-shadow:0 0 0 2px rgba(26,26,46,.15)}
-.rec-card .card-links{display:flex;gap:12px;margin-top:6px}
-.rec-card .card-links a{color:rgba(26,26,46,.4);transition:color .15s}
+.rec-card .card-links{display:flex;gap:16px;margin-top:8px}
+.rec-card .card-links a{color:rgba(26,26,46,.5);transition:color .15s;padding:8px;margin:-8px;display:inline-flex;position:relative;z-index:10}
 .rec-card .card-links a:active{color:#1a1a2e}
-.rec-card .card-links svg{width:22px;height:22px;fill:currentColor}
+.rec-card .card-links svg{width:26px;height:26px;fill:currentColor}
 
 .dots{display:flex;justify-content:center;gap:6px;padding:16px 0 28px;flex-shrink:0}
 .dot{width:8px;height:8px;border-radius:50%;background:rgba(26,26,46,.15);transition:all .2s}
@@ -388,7 +388,7 @@ function updateCarousel(){
 
 // Touch swipe
 const wrap=document.querySelector('.carousel-wrap');
-wrap.addEventListener('touchstart',e=>{touchStartX=e.touches[0].clientX;isDragging=true;
+wrap.addEventListener('touchstart',e=>{if(e.target.closest('a'))return;touchStartX=e.touches[0].clientX;isDragging=true;
   document.getElementById('carousel').classList.add('no-transition')},{passive:true});
 wrap.addEventListener('touchmove',e=>{if(!isDragging)return;touchDeltaX=e.touches[0].clientX-touchStartX;
   const cardW=Math.min(window.innerWidth-64,420)+16;
@@ -401,7 +401,7 @@ wrap.addEventListener('touchend',()=>{if(!isDragging)return;isDragging=false;
 
 // Mouse swipe
 let mouseDown=false,mouseStartX=0;
-wrap.addEventListener('mousedown',e=>{mouseDown=true;mouseStartX=e.clientX;
+wrap.addEventListener('mousedown',e=>{if(e.target.closest('a'))return;mouseDown=true;mouseStartX=e.clientX;
   document.getElementById('carousel').classList.add('no-transition')});
 wrap.addEventListener('mousemove',e=>{if(!mouseDown)return;const dx=e.clientX-mouseStartX;
   const cardW=Math.min(window.innerWidth-64,420)+16;
